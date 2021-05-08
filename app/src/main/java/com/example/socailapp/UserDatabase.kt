@@ -6,7 +6,5 @@ import com.example.socailapp.data.User
 
 @Database(entities = [User::class], version = 1, exportSchema = false)
 abstract class UserDatabase : RoomDatabase() {
-
     abstract fun getUserDao(): UserDao
-
 }
