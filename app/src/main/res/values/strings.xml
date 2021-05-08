@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Socail App</string>
+    <string name="edit">Edit</string>
+    <string name="like">Like</string>
+    <string name="comment">Comment</string>
+    <string name="share">Share</string>
+    <string name="write_post_here">Write Post Here</string>
+    <string name="post">Post</string>
+    <string name="image">Image</string>
+    <string name="save">Save</string>
+    <string name="description">Description</string>
+    <string name="username">Username</string>
+    <string name="choose_image">Choose Image</string>
+    <string name="activity">Activity</string>
+    <string name="see_all_activity">See All Activity</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="search">Search</string>
+    <string name="what_do_you_want_to_talk_about">What do you want to talk about?</string>
+    <string name="decline">Decline</string>
+    <string name="accept">Accept</string>
+</resources>
