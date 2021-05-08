@@ -4,11 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.example.socailapp.FirebaseService
 import com.example.socailapp.R
 import com.example.socailapp.data.User
 import com.example.socailapp.databinding.ActivityLoginBinding
+import com.example.socailapp.viewModel.LoginViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -16,17 +17,19 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.util.*
-
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
     private val RC_SIGN_IN = 123
     private lateinit var binding: ActivityLoginBinding
+    private val loginViewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,13 +48,12 @@ class LoginActivity : AppCompatActivity() {
                 binding.progressbar.visibility = View.VISIBLE
             }
         }
-
     }
 
     override fun onStart() {
         super.onStart()
         binding.progressbar.visibility = View.GONE
-        val currentUser = FirebaseService().currentUser
+        val currentUser = Firebase.auth.currentUser
         updateUI(currentUser)
     }
 
@@ -68,7 +70,6 @@ class LoginActivity : AppCompatActivity() {
             Toast.makeText(this, "No Account Selected", Toast.LENGTH_SHORT).show()
             binding.progressbar.visibility = View.GONE
         }
-
     }
 
     private fun googleAuthForFirebase(googleSignInAccount: GoogleSignInAccount) {
@@ -84,8 +85,12 @@ class LoginActivity : AppCompatActivity() {
                         id = firebaseUser.uid,
                         imageURL = firebaseUser.photoUrl!!.toString()
                     )
-                    FirebaseService().addUser(user)
-                    updateUI(FirebaseService().currentUser)
+                    // Adding in Firebase
+                    loginViewModel.addUser(user)
+                    // Adding in Room if user already present IGNORE
+                    loginViewModel.addUserDB(user)
+
+                    updateUI(firebaseUser)
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {

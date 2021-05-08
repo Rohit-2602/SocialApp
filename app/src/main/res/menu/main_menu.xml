@@ -6,4 +6,10 @@
         android:id="@+id/signOut"
         android:title="@string/sign_out" />
 
+    <item
+        android:id="@+id/searchFragment"
+        android:icon="@drawable/ic_search"
+        android:title="@string/search"
+        app:showAsAction="always" />
+
 </menu>

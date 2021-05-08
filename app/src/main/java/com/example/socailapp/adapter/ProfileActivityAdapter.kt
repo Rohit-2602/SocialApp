@@ -1,46 +1,30 @@
 package com.example.socailapp.adapter
 
 import android.annotation.SuppressLint
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.view.ContextThemeWrapper
+import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.socailapp.FirebaseService
 import com.example.socailapp.R
+import com.example.socailapp.Utils
 import com.example.socailapp.data.Post
+import com.example.socailapp.data.User
 import com.example.socailapp.databinding.ItemPostBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
-class ProfileActivityAdapter(private val listener: OnClickListener) :
-    ListAdapter<Post, ProfileActivityAdapter.ProfileActivityViewHolder>(DiffUtilCallback()) {
+class ProfileActivityAdapter(private val listener: ProfileActivityItemClick, private val currentUser: User) :
+    ListAdapter<Post, ProfileActivityAdapter.ProfileActivityViewHolder>(DiffUtilCallBack()) {
 
-    class ProfileActivityViewHolder(val binding: ItemPostBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(post: Post) {
-            binding.apply {
-                CoroutineScope(Dispatchers.IO).launch {
-                    val postCreator = FirebaseService().getUserById(post.creatorId)!!
-                    withContext(Dispatchers.Main) {
-                        postBodyTV.text = post.text
-                        Glide.with(binding.root).load(post.image).into(postIV)
-                        Glide.with(binding.root).load(postCreator.imageURL).circleCrop()
-                            .into(postProfileIV)
-                        usernameTV.text = postCreator.name
-                        descriptionTV.text = postCreator.description
-                        timeTV.text = post.createdAt
-                    }
-                }
-            }
-        }
-    }
-
-    class DiffUtilCallback : DiffUtil.ItemCallback<Post>() {
+    class DiffUtilCallBack: DiffUtil.ItemCallback<Post>() {
         override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
-            return oldItem.id == newItem.id
+            return oldItem == newItem
         }
 
         override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
@@ -48,12 +32,43 @@ class ProfileActivityAdapter(private val listener: OnClickListener) :
         }
     }
 
+    inner class ProfileActivityViewHolder(val binding: ItemPostBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(post: Post) {
+            binding.apply {
+                postBodyTV.text = post.text
+                Glide.with(binding.root).load(post.image).into(postIV)
+                Glide.with(binding.root).load(currentUser.imageURL).circleCrop().into(postProfileIV)
+                usernameTV.text = currentUser.name
+                descriptionTV.text = currentUser.description
+                timeTV.text = Utils.getTimeAgo(post.createdAt)
+            }
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileActivityViewHolder {
         val binding = ItemPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         val viewHolder = ProfileActivityViewHolder(binding)
-
         viewHolder.binding.likeButton.setOnClickListener {
             listener.onLikeClicked(getItem(viewHolder.adapterPosition).id)
+        }
+        viewHolder.binding.commentButton.setOnClickListener {
+            listener.comment(getItem(viewHolder.adapterPosition))
+        }
+        viewHolder.binding.options.setOnClickListener {
+            val wrapper = ContextThemeWrapper(parent.context, R.style.Widget_AppCompat_PopupMenu)
+            val popup = PopupMenu(wrapper, it, Gravity.END)
+            popup.inflate(R.menu.post_menu)
+            popup.setOnMenuItemClickListener { item ->
+                when(item.itemId) {
+                    R.id.deletePost -> {
+                        listener.deletePost(getItem(viewHolder.adapterPosition).id)
+                        Toast.makeText(parent.context, "Post Deleted", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+                return@setOnMenuItemClickListener true
+            }
+            popup.show()
         }
         return viewHolder
     }
@@ -63,9 +78,10 @@ class ProfileActivityAdapter(private val listener: OnClickListener) :
         val currentPost = getItem(position)
         holder.bind(currentPost)
 
-        val currentUserId = FirebaseService().currentUser!!.uid
+        val currentUserId = Firebase.auth.currentUser!!.uid
         val isLiked = currentPost.likedBy.contains(currentUserId)
         val likeCount = currentPost.likedBy.size
+        val commentCount = currentPost.commentedBy.size
         if (isLiked) {
             holder.binding.likeButton.setCompoundDrawablesWithIntrinsicBounds(
                 0,
@@ -87,9 +103,16 @@ class ProfileActivityAdapter(private val listener: OnClickListener) :
             1 -> holder.binding.likeCountTV.text = "$likeCount Like"
             else -> holder.binding.likeCountTV.text = "$likeCount Likes"
         }
+        when (commentCount) {
+            0 -> holder.binding.commentCountTV.text = ""
+            1 -> holder.binding.commentCountTV.text = "$commentCount comment"
+            else -> holder.binding.commentCountTV.text = "$commentCount comments"
+        }
     }
 }
 
-//interface OnClickListener {
-//    fun onLikeClicked(postId: String)
-//}
+interface ProfileActivityItemClick {
+    fun onLikeClicked(postId: String)
+    fun comment(post: Post)
+    fun deletePost(postId: String)
+}

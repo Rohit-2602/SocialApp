@@ -4,28 +4,26 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.socailapp.FirebaseService
 import com.example.socailapp.R
-import com.example.socailapp.adapter.HomeAdapter
-import com.example.socailapp.adapter.OnClickListener
+import com.example.socailapp.adapter.AllActivityAdapter
+import com.example.socailapp.adapter.AllActivityItemClick
 import com.example.socailapp.data.Post
+import com.example.socailapp.data.User
 import com.example.socailapp.databinding.FragmentAllActivityBinding
-import com.example.socailapp.viewModel.PostViewModel
-import com.firebase.ui.firestore.FirestoreRecyclerOptions
-import com.google.firebase.firestore.Query
+import com.example.socailapp.viewModel.AllActivityViewModel
+import kotlinx.android.synthetic.main.toolbar_all_activity.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-class AllActivityFragment : Fragment(R.layout.fragment_all_activity), OnClickListener {
+class AllActivityFragment : Fragment(R.layout.fragment_all_activity), AllActivityItemClick {
 
     private lateinit var binding: FragmentAllActivityBinding
-    private val postViewModel = PostViewModel()
-//    private val homeAdapter = ProfileActivityAdapter(this)
     private val navArgs : AllActivityFragmentArgs by navArgs()
-
-    private lateinit var postHomeAdapter: HomeAdapter
-    private val firebaseService = FirebaseService()
+    private val allActivityViewModel = AllActivityViewModel()
+    private lateinit var currentUser: User
+    private lateinit var allActivityAdapter: AllActivityAdapter
 
     @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -34,43 +32,45 @@ class AllActivityFragment : Fragment(R.layout.fragment_all_activity), OnClickLis
 
         val userUID = navArgs.User.id
 
-        val postsCollections = firebaseService.userPostCollection.document(userUID).collection("user_post")
-        val query = postsCollections.orderBy("createdAt", Query.Direction.DESCENDING)
-        val recyclerViewOptions = FirestoreRecyclerOptions.Builder<Post>().setQuery(query, Post::class.java).build()
+        binding.apply {
+            backBTN.setOnClickListener {
+                findNavController().navigateUp()
+            }
+        }
 
-        postHomeAdapter = HomeAdapter(recyclerViewOptions, this)
+        allActivityViewModel.getCurrentUserById(userUID).observe(viewLifecycleOwner) {
+            currentUser = it
+            setupRecyclerview()
+        }
 
+        allActivityViewModel.getUserPost(userUID).observe(viewLifecycleOwner) {
+            allActivityAdapter.submitList(it)
+            allActivityAdapter.notifyDataSetChanged()
+        }
+    }
+
+    override fun deletePost(postId: String) {
+        allActivityViewModel.deletePost(postId)
+    }
+
+    private fun setupRecyclerview() {
+        allActivityAdapter = AllActivityAdapter(this, currentUser)
         binding.apply {
             allActivityRV.apply {
-                adapter = postHomeAdapter
+                adapter = allActivityAdapter
                 layoutManager = LinearLayoutManager(requireContext())
                 setHasFixedSize(true)
             }
         }
-
-//        postViewModel.userPost.observe(viewLifecycleOwner) {
-//            homeAdapter.submitList(it)
-//            homeAdapter.notifyDataSetChanged()
-//        }
-
     }
 
-    override fun onStart() {
-        super.onStart()
-        postHomeAdapter.startListening()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        postHomeAdapter.stopListening()
+    override fun commentOnPost(post: Post) {
+        val action = AllActivityFragmentDirections.actionAllActivityFragmentToCommentFragment(post)
+        findNavController().navigate(action)
     }
 
     override fun onLikeClicked(postId: String) {
-        postViewModel.updateLike(postId)
+        allActivityViewModel.updateLikes(postId)
         Toast.makeText(requireContext(), "Liked", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun seeUserProfile(userUid: String) {
-
     }
 }

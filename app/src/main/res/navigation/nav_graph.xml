@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_homeFragment_to_userProfileFragment"
             app:destination="@id/userProfileFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_commentFragment"
+            app:destination="@id/commentFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -25,21 +28,24 @@
         <action
             android:id="@+id/action_searchFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.socailapp.ui.ProfileFragment"
         android:label="Profile"
-        tools:layout="@layout/fragment_profile" >
+        tools:layout="@layout/fragment_profile">
         <action
             android:id="@+id/action_profileFragment_to_editProfileFragment"
             app:destination="@id/editProfileFragment" />
         <action
             android:id="@+id/action_profileFragment_to_allActivityFragment"
             app:destination="@id/allActivityFragment" />
-        <argument
-            android:name="UserUid"
-            app:argType="string" />
+        <action
+            android:id="@+id/action_profileFragment_to_commentFragment"
+            app:destination="@id/commentFragment" />
     </fragment>
     <fragment
         android:id="@+id/postFragment"
@@ -67,6 +73,9 @@
         <argument
             android:name="User"
             app:argType="com.example.socailapp.data.User" />
+        <action
+            android:id="@+id/action_allActivityFragment_to_commentFragment"
+            app:destination="@id/commentFragment" />
     </fragment>
     <fragment
         android:id="@+id/userProfileFragment"
@@ -79,6 +88,9 @@
         <action
             android:id="@+id/action_userProfileFragment_to_allActivityFragment"
             app:destination="@id/allActivityFragment" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_commentFragment"
+            app:destination="@id/commentFragment" />
     </fragment>
     <fragment
         android:id="@+id/connectionFragment"
@@ -88,5 +100,29 @@
         <action
             android:id="@+id/action_connectionFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_connectionFragment_to_manageConnectionFragment"
+            app:destination="@id/manageConnectionFragment" />
+        <action
+            android:id="@+id/action_connectionFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/manageConnectionFragment"
+        android:name="com.example.socailapp.ui.ManageConnectionFragment"
+        android:label="Manage Connection"
+        tools:layout="@layout/fragment_manage_connection">
+        <action
+            android:id="@+id/action_manageConnectionFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
+    </fragment><action android:id="@+id/action_global_searchFragment" app:destination="@id/searchFragment"/>
+    <fragment
+        android:id="@+id/commentFragment"
+        android:name="com.example.socailapp.ui.CommentFragment"
+        android:label="Comment"
+        tools:layout="@layout/fragment_comment">
+        <argument
+            android:name="Post"
+            app:argType="com.example.socailapp.data.Post" />
     </fragment>
 </navigation>

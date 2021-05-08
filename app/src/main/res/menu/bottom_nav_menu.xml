@@ -4,27 +4,21 @@
     <item
         android:id="@+id/homeFragment"
         android:icon="@drawable/ic_home"
-        android:title="Home" />
+        android:title="@string/home" />
 
     <item
         android:id="@+id/connectionFragment"
         android:icon="@drawable/ic_connections"
-        android:title="Connection" />
-
+        android:title="@string/connections" />
 
     <item
         android:id="@+id/postFragment"
         android:icon="@drawable/ic_baseline_add_24"
-        android:title="Post" />
-
-    <item
-        android:id="@+id/searchFragment"
-        android:icon="@drawable/ic_search"
-        android:title="Search" />
+        android:title="@string/post" />
 
     <item
         android:id="@+id/profileFragment"
         android:icon="@drawable/ic_profile"
-        android:title="Profile" />
+        android:title="@string/profile" />
 
 </menu>

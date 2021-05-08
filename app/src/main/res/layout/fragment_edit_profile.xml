@@ -3,37 +3,42 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.EditProfileFragment">
+    android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/saveButton"
-        android:layout_width="match_parent"
+    <include
+        android:id="@+id/editToolbar"
+        layout="@layout/toolbar_edit_intro" />
+
+    <TextView
+        android:id="@+id/profile_photoTV"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="@string/save"
+        android:layout_marginTop="20dp"
+        android:text="@string/profile_photo"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/editToolbar" />
 
-    <Button
-        android:id="@+id/chooseImageButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_margin="10dp"
-        android:text="@string/choose_image"
-        app:layout_constraintTop_toBottomOf="@+id/descriptionTextInputLayout" />
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardview"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        app:cardCornerRadius="40dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="@+id/profile_photoTV"
+        app:layout_constraintStart_toStartOf="@+id/profile_photoTV"
+        app:layout_constraintTop_toBottomOf="@+id/profile_photoTV">
 
-    <ImageView
-        android:id="@+id/profileIV"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_margin="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/saveButton" />
+        <ImageView
+            android:id="@+id/chooseImageButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/blackboard"
+            tools:ignore="ContentDescription" />
+
+    </androidx.cardview.widget.CardView>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/usernameTextInputLayout"
@@ -43,7 +48,7 @@
         android:layout_margin="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileIV">
+        app:layout_constraintTop_toBottomOf="@+id/cardview">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/usernameTV"

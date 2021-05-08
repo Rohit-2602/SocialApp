@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Socail App</string>
+    <string name="app_name">Social App</string>
     <string name="edit">Edit</string>
     <string name="like">Like</string>
     <string name="comment">Comment</string>
@@ -7,7 +7,6 @@
     <string name="write_post_here">Write Post Here</string>
     <string name="post">Post</string>
     <string name="image">Image</string>
-    <string name="save">Save</string>
     <string name="description">Description</string>
     <string name="username">Username</string>
     <string name="choose_image">Choose Image</string>
@@ -18,4 +17,17 @@
     <string name="what_do_you_want_to_talk_about">What do you want to talk about?</string>
     <string name="decline">Decline</string>
     <string name="accept">Accept</string>
+    <string name="profile_photo">Profile Photo</string>
+    <string name="edit_intro">Edit Intro</string>
+    <string name="save">Save</string>
+    <string name="manage_connections">Manage Connections</string>
+    <string name="connections">Connections</string>
+    <string name="remove_connection">Remove Connection</string>
+    <string name="share_post">Share Post</string>
+    <string name="your_profile">Your Profile</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="comments">Comments</string>
+    <string name="enter_your_thoughts_here">Enter Your Thoughts Here</string>
+    <string name="delete_post">Delete Post</string>
 </resources>

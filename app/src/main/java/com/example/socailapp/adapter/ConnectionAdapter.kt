@@ -7,21 +7,23 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.socailapp.databinding.ItemConnectionRequestBinding
-import com.example.socailapp.viewModel.UserViewModel
+import com.example.socailapp.viewModel.ConnectionViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ConnectionAdapter(private val listener: ConnectionInterface) : ListAdapter<String, ConnectionAdapter.ConnectionViewHolder>(DiffUtilCallback()) {
+class ConnectionAdapter(private val listener: ConnectionInterface) :
+    ListAdapter<String, ConnectionAdapter.ConnectionViewHolder>(DiffUtilCallback()) {
 
-    class ConnectionViewHolder(val binding: ItemConnectionRequestBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ConnectionViewHolder(val binding: ItemConnectionRequestBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(uid: String) {
             binding.apply {
                 CoroutineScope(Dispatchers.IO).launch {
-                    val user = UserViewModel().getUserById(uid)!!
+                    val user = ConnectionViewModel().getUserById(uid)
                     withContext(Dispatchers.Main) {
-                        Glide.with(binding.root).load(user.imageURL).into(profileIV)
+                        Glide.with(binding.root).load(user.imageURL).circleCrop().into(profileIV)
                         profilenameTV.text = user.name
                         descriptionTV.text = user.description
                     }
@@ -41,20 +43,9 @@ class ConnectionAdapter(private val listener: ConnectionInterface) : ListAdapter
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConnectionViewHolder {
-        val binding = ItemConnectionRequestBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        val viewHolder = ConnectionViewHolder(binding)
-
-//        val currentItem = getItem(viewHolder.adapterPosition)
-//
-//        viewHolder.binding.acceptBTN.setOnClickListener {
-//            listener.acceptRequest(currentItem)
-//        }
-//
-//        viewHolder.binding.declineBTN.setOnClickListener {
-//            listener.declineRequest(currentItem)
-//        }
-
-        return viewHolder
+        val binding =
+            ItemConnectionRequestBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ConnectionViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ConnectionViewHolder, position: Int) {
@@ -69,10 +60,15 @@ class ConnectionAdapter(private val listener: ConnectionInterface) : ListAdapter
             listener.declineRequest(currentItem)
         }
 
+        holder.binding.constraintLayout.setOnClickListener {
+            listener.seeUserProfile(currentItem)
+        }
+
     }
 }
 
 interface ConnectionInterface {
     fun acceptRequest(uid: String)
     fun declineRequest(uid: String)
+    fun seeUserProfile(uid: String)
 }

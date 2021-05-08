@@ -3,7 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-android-extensions'
     id 'kotlin-kapt'
-//    id 'dagger.hilt.android.plugin'
+    id 'dagger.hilt.android.plugin'
     id 'com.google.gms.google-services'
 }
 apply plugin: "androidx.navigation.safeargs.kotlin"
@@ -95,9 +95,9 @@ dependencies {
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
     // Dagger Hilt
-//    implementation "com.google.dagger:hilt-android:$hiltVersion"
-//    kapt "com.google.dagger:hilt-android-compiler:$hiltVersion"
-//    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hiltAndroidXVersion"
-//    kapt "androidx.hilt:hilt-compiler:$hiltAndroidXVersion"
+    implementation "com.google.dagger:hilt-android:$hiltVersion"
+    kapt "com.google.dagger:hilt-android-compiler:$hiltVersion"
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hiltAndroidXVersion"
+    kapt "androidx.hilt:hilt-compiler:$hiltAndroidXVersion"
 
 }

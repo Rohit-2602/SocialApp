@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="10dp"
-    android:layout_marginTop="10dp"
-    android:layout_marginEnd="10dp">
+    android:layout_margin="10dp"
+    app:cardElevation="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#F6E7D3">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/profileIV"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_margin="10dp"
             android:src="@drawable/ic_profile"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription" />
@@ -28,12 +26,13 @@
             android:id="@+id/profilenameTV"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:textColor="@color/black"
             android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/declineBTN"
             app:layout_constraintStart_toEndOf="@+id/profileIV"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Rohit Sharma" />
@@ -49,35 +48,36 @@
             android:maxLines="1"
             android:textColor="@color/black"
             android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/declineBTN"
             app:layout_constraintStart_toEndOf="@+id/profileIV"
             app:layout_constraintTop_toBottomOf="@+id/profilenameTV"
             tools:text="Description" />
 
-        <Button
+        <ImageView
             android:id="@+id/declineBTN"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="@string/decline"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginEnd="10dp"
+            android:background="@drawable/shape_hollow_circle"
+            android:padding="5dp"
+            android:src="@drawable/ic_baseline_close_24"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/acceptBTN"
-            app:layout_constraintHorizontal_bias="0.5"
-            android:textColor="@color/black"
-            app:layout_constraintStart_toEndOf="@+id/profileIV"
-            app:layout_constraintTop_toBottomOf="@id/profileIV" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
 
-        <Button
+        <ImageView
             android:id="@+id/acceptBTN"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/shape_hollow_circle_blue"
+            android:padding="5dp"
             android:layout_marginEnd="10dp"
-            android:text="@string/accept"
-            android:layout_marginStart="10dp"
+            android:src="@drawable/ic_check"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/declineBTN"
-            app:layout_constraintTop_toBottomOf="@id/profileIV" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
