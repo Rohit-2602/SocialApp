@@ -46,6 +46,7 @@ class LoginActivity : AppCompatActivity() {
             googleSignInClient.signInIntent.also {
                 startActivityForResult(it, RC_SIGN_IN)
                 binding.progressbar.visibility = View.VISIBLE
+                binding.googleSignInButton.isEnabled = false
             }
         }
     }
@@ -69,6 +70,7 @@ class LoginActivity : AppCompatActivity() {
         } catch (e: Exception) {
             Toast.makeText(this, "No Account Selected", Toast.LENGTH_SHORT).show()
             binding.progressbar.visibility = View.GONE
+            binding.googleSignInButton.isEnabled = true
         }
     }
 
