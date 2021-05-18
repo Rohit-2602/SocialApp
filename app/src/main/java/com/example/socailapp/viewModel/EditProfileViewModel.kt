@@ -26,13 +26,13 @@ class EditProfileViewModel @ViewModelInject constructor(private val userDao: Use
         userDao.updateUser(user)
     }
 
-    fun updateFirebaseUser(name: String, description: String, imageUrl: String) {
+    suspend fun updateFirebaseUser(name: String, description: String, imageUrl: String) {
         currentUserCollection.update(
             "name", name,
             "lowercaseName", name.toLowerCase(Locale.ROOT),
             "description", description,
             "imageURL", imageUrl
-        )
+        ).await()
     }
 
     fun uploadImage(imageUri: Uri) = viewModelScope.launch {
@@ -49,6 +49,10 @@ class EditProfileViewModel @ViewModelInject constructor(private val userDao: Use
         Log.i("Profile", "GET DOWNLOAD IMAGE URL")
         val path = imageUri.toString()
         return imageCollection.child("${currentUserId}/images/$path").downloadUrl.await().toString()
+    }
+
+    fun userSame(currentUser: User, name: String, description: String, imageUrl: String) : Boolean {
+        return (currentUser.name == name && currentUser.description == description && currentUser.imageURL == imageUrl)
     }
 
 }

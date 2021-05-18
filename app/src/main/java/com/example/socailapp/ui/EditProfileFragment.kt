@@ -15,7 +15,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.socailapp.R
-import com.example.socailapp.data.User
 import com.example.socailapp.databinding.FragmentEditProfileBinding
 import com.example.socailapp.viewModel.EditProfileViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -26,6 +25,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
+
 @AndroidEntryPoint
 class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
 
@@ -63,17 +63,18 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
                     } else {
                         currentUser.name = usernameTV.text.toString().trim()
                     }
-                    currentUser.lowercaseName = usernameTV.text.toString().trim().toLowerCase(Locale.ROOT)
+                    currentUser.lowercaseName =
+                        usernameTV.text.toString().trim().toLowerCase(Locale.ROOT)
                     currentUser.description = descriptionTV.text.toString().trim()
                     currentUser.imageURL = imageUrl!!
 
-                    editProfileViewModel.updateFirebaseUser(
-                        name = currentUser.name!!,
-                        description = currentUser.description,
-                        imageUrl = currentUser.imageURL
-                    )
-                    editProfileViewModel.updateDBUser(user = currentUser)
                     withContext(Dispatchers.Main) {
+                        editProfileViewModel.updateDBUser(user = currentUser)
+                        editProfileViewModel.updateFirebaseUser(
+                            name = currentUser.name,
+                            description = currentUser.description,
+                            imageUrl = currentUser.imageURL
+                        )
                         Snackbar.make(binding.root, "Changes Saved", Snackbar.LENGTH_SHORT).show()
                         findNavController().navigateUp()
                     }
@@ -88,14 +89,10 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
             }
 
             cancel_button.setOnClickListener {
-                val newUser = User(
-                    id = currentUser.id,
-                    name = usernameTV.text.toString(),
-                    lowercaseName = usernameTV.text.toString().toLowerCase(Locale.ROOT),
-                    imageURL = imageUrl!!,
-                    description = descriptionTV.text.toString()
-                )
-                if (newUser != currentUser) {
+                if (!editProfileViewModel.userSame(currentUser,
+                        usernameTV.text.toString().trim(),
+                        descriptionTV.text.toString().trim(),
+                        imageUrl!!)) {
                     showAlertDialog()
                 }
                 else {

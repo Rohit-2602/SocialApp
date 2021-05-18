@@ -11,7 +11,7 @@ import kotlinx.android.parcel.Parcelize
 data class User(
     @PrimaryKey
     var id: String = "",
-    var name: String? = "",
+    var name: String = "",
     var lowercaseName: String? = "",
     var imageURL: String = "",
     var description: String = "",
