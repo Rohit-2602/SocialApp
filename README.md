@@ -3,6 +3,7 @@ This is a android app practice project. I have created a Social App. I combined 
 ## App Features
 **Post Something(text with Image)**\
 **Send Connection Requests To other users**\
+**Search User Based On Their Name**\
 **Update Profile**\
 **See Other users Post and Profile**\
 **Like and Comment on Someone's Post**\
